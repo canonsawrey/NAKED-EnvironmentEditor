@@ -18,7 +18,8 @@ class EnvEditor extends Component {
     this.featureCounter = 0
     this.addFeature = this.addFeature.bind(this);
     this.onFeatureChange = this.onFeatureChange.bind(this);
-    this.removeFeature = this.removeFeature.bind(this);
+    this.removeFeature = this.removeFeature.bind(this);  
+    this.exportJson = this.exportJson.bind(this);
   }
   
   addFeature() {
@@ -51,6 +52,14 @@ class EnvEditor extends Component {
       console.log(fm)
     }
     console.log(this.features)
+  }
+
+  exportJson() {
+    var a = document.createElement("a");
+    var file = new Blob([JSON.stringify(this.features)], {type: 'text/plain'});
+    a.href = URL.createObjectURL(file);
+    a.download = "map.json";
+    a.click();
   }
 
   render() {
@@ -102,6 +111,9 @@ class EnvEditor extends Component {
               Add feature
             </button>
             {this.state.features.map((feature) => <Feature key={feature.getKey()} onChange={this.onFeatureChange} delete={this.deleteFeature} model={feature}/>)}
+            <button type="button" onClick={this.exportJson}>
+              Export JSON
+            </button>
         </div>
       </div>
     );
