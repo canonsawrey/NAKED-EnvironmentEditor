@@ -1,8 +1,8 @@
 import './App.css';
-import EnvDisplay from './EnvDisplay.js';
+import EnvEditor from './EnvEditor.js';
 
 function App() {
-  return <EnvDisplay x={30} y={80}/>
+  return <EnvEditor/>;
 }
 
 export default App;

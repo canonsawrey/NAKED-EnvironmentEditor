@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Stage, Layer, Rect, Text, Line } from 'react-konva';
+import { Stage, Layer, Rect, Text } from 'react-konva';
 
 const buffer = 40
 
@@ -8,26 +8,24 @@ function scale(x, y) {
 }
 
 function x_offset(x, y) {
-  return (x / y < window.innerWidth / window.innerHeight) ? 0 : 0; 
+  return (x / y < (window.innerWidth / 2 - 2 * buffer) / (window.innerHeight - 2 * buffer)) ? (window.innerWidth / 2 - x * scale(x, y)) / 2 : 0; 
 }
 
 function y_offset(x, y) {
-  return (x / y < window.innerWidth / window.innerHeight) ? 0 : 0; 
+  return (x / y < (window.innerWidth / 2 - 2 * buffer) / (window.innerHeight - 2 * buffer)) ? 0 : (window.innerHeight - y * scale(x, y)) / 2; 
 }
 
 class EnvDisplay extends Component {
   constructor(props) {
     super(props);
-    // Fit env to window
-    // TODO
   }
     
   render() {
     return (
     <Stage width={window.innerWidth / 2 + 1} height={window.innerHeight}>
       <Layer>
-        <Text text={"(0, 0)"} fontSize={15} x={buffer / 2} y={this.props.y * scale(this.props.x, this.props.y) + buffer * 1.5}/>
-        <Text text={`(${this.props.x}, ${this.props.y})`} fontSize={15} x={this.props.x * scale(this.props.x, this.props.y)} y={buffer / 2}/>
+        <Text text={"(0, 0)"} fontSize={15} x={buffer / 2 + + x_offset(this.props.x, this.props.y)} y={this.props.y * scale(this.props.x, this.props.y) + buffer * 1.5 + y_offset(this.props.x, this.props.y)}/>
+        <Text text={`(${this.props.x}, ${this.props.y})`} fontSize={15} x={this.props.x * scale(this.props.x, this.props.y) + x_offset(this.props.x, this.props.y)} y={buffer / 2 + + y_offset(this.props.x, this.props.y)}/>
         <Rect
           x={buffer + x_offset(this.props.x, this.props.y)}
           y={buffer + y_offset(this.props.x, this.props.y)}
@@ -35,8 +33,12 @@ class EnvDisplay extends Component {
           height={this.props.y * scale(this.props.x, this.props.y)}
           stroke="black"
         />
-        <Line
-          points={window.innerWidth / 2, 0, window.innerWidth / 2, window.height}
+        <Rect
+          x={window.innerWidth / 2}
+          y={0}
+          width={1}
+          height={window.innerHeight}
+          stroke="black"
         />
       </Layer>
     </Stage>
